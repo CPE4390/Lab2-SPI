@@ -2,18 +2,11 @@
 #include <stdio.h>
 #include "LCD.h"
 
-#if defined __18F8722
-	#pragma config OSC=HSPLL
-	#pragma config WDT=OFF
-	#pragma config LVP=OFF
-	#pragma config XINST=OFF
-#elif defined __18F87J11
+
 	#pragma config FOSC=HSPLL
 	#pragma config WDTEN=OFF
 	#pragma config XINST=OFF
-#else
-	#error Invalid processor selection
-#endif
+
 
 //Wire EEPROM as below
 //PIC Board    EEPROM
@@ -124,7 +117,7 @@ void ConfigPeriph(void)
 }
 
 
-void interrupt HighIsr(void)
+void __interrupt(high_priority) HighIsr(void)
 {
 	//Check the source of the interrupt
 	if (INTCONbits.INT0IF == 1)
