@@ -1,5 +1,5 @@
 # Lab2-SPI  
-SPI interface between uController and an SPI EEPROM
+SPI interface between a uController and an SPI EEPROM
 
 Requires:  
 * Explorer 18 Board
