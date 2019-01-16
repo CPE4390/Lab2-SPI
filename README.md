@@ -5,5 +5,5 @@ Requires:
 * Explorer 18 Board
 * Pickit 3
 * PIC18F87J11 Plugin module (PIM)
-* SPI EEPROM
+* SPI EEPROM (25AA1024)  
 * Breadboard and jumpers
