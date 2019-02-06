@@ -18,8 +18,7 @@
 //    3.3V <->  Vcc, WP, HOLD
 //    GND  <->  Vss
 //
-// For the 25AA1024 and 25LC1024 you need to uncomment two lines of code as
-// noted below.
+////////////////////////////////////
 
 void InitPins(void);
 void ConfigInterrupts(void);
@@ -45,15 +44,16 @@ void main(void)
 	InitPins();
 	ConfigPeriph();
 	
-	//Read address 0 of EEPROM
+	//Read address 0x0280 of EEPROM
 	LATDbits.LATD7 = 0;  //enable CS
 	SPIReadWrite(0b00000011);  //Read command
-	SPIReadWrite(0);		//16 bit address (0x0000)
-	SPIReadWrite(0);
-    //SPIReadWrite(0);    //Uncomment this line for the 1024 EEPROM with 3 byte address
+	SPIReadWrite(0x00);		//24 bit address (0x000280)
+	SPIReadWrite(0x02);
+    SPIReadWrite(0x80);   
 	rx = SPIReadWrite(0);  //Read value - data sent is dummy data
 	LATDbits.LATD7 = 1;  //disable CS
-	
+    
+    //Display the value on LCD
 	sprintf(line2str, "Read %d", rx);
 	LCDClearLine(1);
 	LCDWriteLine(line2str, 1);
@@ -131,9 +131,9 @@ void __interrupt(high_priority) HighIsr(void)
 		Nop();
 		LATDbits.LATD7 = 0;  //enable CS
 		SPIReadWrite(0b00000010);  //Write command
-		SPIReadWrite(0);		//16 bit address (0x0000)
-		SPIReadWrite(0);
-        //SPIReadWrite(0);    //Uncomment this line for the 1024 EEPROM with 3 byte address
+		SPIReadWrite(0x00);		//24 bit address (0x000280)
+		SPIReadWrite(0x02);
+        SPIReadWrite(0x80); 
 		SPIReadWrite(count);  //Write value
 		LATDbits.LATD7 = 1;  //disable CS
 		
