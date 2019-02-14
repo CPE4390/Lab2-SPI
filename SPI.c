@@ -49,7 +49,7 @@ void main(void)
 	SPIReadWrite(0b00000011);  //Read command
 	SPIReadWrite(0x00);		//24 bit address (0x000280)
 	SPIReadWrite(0x02);
-    SPIReadWrite(0x80);   
+        SPIReadWrite(0x80);   
 	rx = SPIReadWrite(0);  //Read value - data sent is dummy data
 	LATDbits.LATD7 = 1;  //disable CS
     
@@ -124,7 +124,7 @@ void __interrupt(high_priority) HighIsr(void)
 	{
 		//source is INT0
 
-		//Write address 0 of EEPROM
+		//Write address 0x0280 of EEPROM
 		LATDbits.LATD7 = 0;  //enable CS
 		SPIReadWrite(0b00000110);  //WREN command
 		LATDbits.LATD7 = 1;  //disable CS
@@ -133,9 +133,10 @@ void __interrupt(high_priority) HighIsr(void)
 		SPIReadWrite(0b00000010);  //Write command
 		SPIReadWrite(0x00);		//24 bit address (0x000280)
 		SPIReadWrite(0x02);
-        SPIReadWrite(0x80); 
+                SPIReadWrite(0x80); 
 		SPIReadWrite(count);  //Write value
 		LATDbits.LATD7 = 1;  //disable CS
+		__delay_ms(6); //wait for write cycle to finish
 		
 		sprintf(line2str, "Wrote %d", count);
 		LCDClearLine(1);
