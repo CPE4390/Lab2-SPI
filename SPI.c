@@ -28,15 +28,12 @@ unsigned char SPIReadWrite(unsigned char byte);
 
 #define _XTAL_FREQ 32000000L
 
-char line1str[17];
-char line2str[17];
 int rx;
 int count;
 
 
 void main(void)
 {
-	long i;
 	count = 0;
 	OSCTUNEbits.PLLEN = 1;  
 	LCDInit();
@@ -54,19 +51,15 @@ void main(void)
 	LATDbits.LATD7 = 1;  //disable CS
     
     //Display the value on LCD
-	sprintf(line2str, "Read %d", rx);
-	LCDClearLine(1);
-	LCDWriteLine(line2str, 1);
-
+	lprintf(1, "Read %d", rx);
+    
 	ConfigInterrupts();
 
 	while (1)
 	{
-		sprintf(line1str, "%d", count);
-		LCDClearLine(0);
-		LCDWriteLine(line1str, 0);
-		for (i = 0; i < 50000; ++i);
-		++count;	
+		lprintf(0, "%d", count);
+		__delay_ms(250);	
+        ++count;
 	}
 }
 
@@ -138,9 +131,7 @@ void __interrupt(high_priority) HighIsr(void)
 		LATDbits.LATD7 = 1;  //disable CS
 		__delay_ms(6); //wait for write cycle to finish
 		
-		sprintf(line2str, "Wrote %d", count);
-		LCDClearLine(1);
-		LCDWriteLine(line2str, 1);
+		lprintf(1, "Wrote %d", count);
 		INTCONbits.INT0IF = 0; //must clear the flag to avoid recursive interrupts
 	}		
 }
